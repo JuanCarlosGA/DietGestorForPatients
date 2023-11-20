@@ -73,6 +73,7 @@ public class Utils {
 
     public static void writeText(List<?> list, String fileName) throws Exception {
         Path path = initPath(fileName);
+        System.out.println(path);
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
             for (Object o : list) {
                 writer.append(o.toString());
