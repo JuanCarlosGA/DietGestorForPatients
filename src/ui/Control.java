@@ -1,4 +1,6 @@
 package ui;
+import java.util.ArrayList;
+
 import Helpers.Keyboard;
 import Helpers.Utils;
 
@@ -21,16 +23,16 @@ public class Control {
                 int opcion = leerOpcion();
                 switch (opcion) {
                     case 1:
-
+                        registerDietitian();
                         break;
                     case 2:
 
                         break;
                     case 3:
-
+                        registerPatient();
                         break;
                     case 4:
-                                            break;
+                        break;
 
                     case 5:
 
@@ -76,5 +78,24 @@ public class Control {
 
         int opcion = Keyboard.readInt(opciones);
         return opcion;
+    }
+     private static void registerDietitian() throws Exception {
+
+        ArrayList<String> patients = new ArrayList<>();
+
+        patients.add("Pepe grillo");
+
+        Utils.writeText(patients, "src/CSVs/d.csv");
+
+    }
+
+      private static void registerPatient() throws Exception {
+
+        ArrayList<String> patients = new ArrayList<>();
+
+        patients.add("Pepe grillo");
+
+        Utils.writeText(patients, "src/CSVs/pacientes.csv");
+
     }
 }
