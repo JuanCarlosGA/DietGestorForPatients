@@ -1,14 +1,20 @@
-package clases;
+package Classes;
 
-public class DietPlan {
-    private String dietitianId;
+public class Dietitian {
+    private int dietitianId;
     private String name;
     private String speciality;
 
-    public String getDietitianId() {
+    Dietitian(int dietitianId, String name, String speciality) {
+        this.dietitianId = dietitianId;
+        this.name = name;
+        this.speciality = speciality;
+    }
+
+    public int getDietitianId() {
         return dietitianId;
     }
-    public void setDietitianId(String dietitianId) {
+    public void setDietitianId(int dietitianId) {
         this.dietitianId = dietitianId;
     }
     public String getName() {
