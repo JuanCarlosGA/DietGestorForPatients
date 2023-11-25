@@ -1,17 +1,28 @@
 package UI;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
+import Classes.Dietitian;
 import Helpers.Keyboard;
 import Helpers.Utils;
+import Helpers.CSVCoder;
 
 public class Control {
 
-    public static void main(String[] args) {
-        menu();
+    private int dietitianIdCounter = 1;
+    private int patientIdCounter = 1;
+
+    public void showArray(ArrayList<Dietitian> array) {
+        for (Dietitian element : array) {
+            System.out.println(element.getName());
+        }
     }
 
-    private static void menu() {
+    public void menu() {
 
         try {
             clean();
@@ -81,17 +92,51 @@ public class Control {
         return opcion;
     }
 
-    private static void registerDietitian() throws Exception {
+    public void registerDietitian() throws Exception {
+        ArrayList<String> dietitian = new ArrayList<>();
+        String info = Keyboard.readString("Enter the name of the dietitian: ");
 
-        ArrayList<String> jugadores = new ArrayList<>();
+        dietitian.add("Diego Armando Maradona");
 
-        jugadores.add("Diego Armando Maradona");
-
-        Utils.writeText(jugadores, "src/CSVs/dietitians.csv");
+        Utils.writeText(dietitian, "src/CSVs/dietitians.csv");
 
     }
 
-     private static void registerPatient() throws Exception {
+    public void readDietitians() throws Exception {
+        ArrayList<String> dietitians = new ArrayList<>();
+
+        CSVCoder<Dietitian> coder = new CSVCoder<Dietitian>(';') {
+            @Override
+            public String[] encode(Dietitian dietitian) {
+                String[] data = new String[3];
+                data[0] = String.valueOf(dietitian.getDietitianId());
+                data[1] = dietitian.getName();
+                data[2] = dietitian.getSpeciality();
+                return data;
+            }
+
+            @Override
+            public Dietitian decode(String[] data) {
+                Dietitian dietitian = new Dietitian();
+                dietitian.setDietitianId(Integer.parseInt(data[0]));
+                dietitian.setName(data[1]);
+                dietitian.setSpeciality(data[2]);
+                return dietitian;
+            }
+        };
+        try {
+            coder.readFromFile("src/CSVs/dietitians.csv", null);
+
+            System.out.println("Dietitians:");
+            for (String element : dietitians) {
+                System.out.println(element);
+            }
+        } catch (IOException e) {
+            System.out.println("Archivo no encontrado en Control.java");
+        }
+    }
+
+     public void registerPatient() throws Exception {
 
         ArrayList<String> jugadores = new ArrayList<>();
 
