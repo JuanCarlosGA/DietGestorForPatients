@@ -1,4 +1,7 @@
 package UI;
+
+import java.util.ArrayList;
+
 import Helpers.Keyboard;
 import Helpers.Utils;
 
@@ -11,7 +14,7 @@ public class Control {
     private static void menu() {
 
         try {
-            inicializar();
+            clean();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -21,25 +24,25 @@ public class Control {
                 int opcion = leerOpcion();
                 switch (opcion) {
                     case 1:
-
+                        registerDietitian();
                         break;
                     case 2:
 
                         break;
                     case 3:
-
+                        registerPatient();
                         break;
                     case 4:
-                                            break;
+                        break;
 
                     case 5:
 
                         break;
-                        case 6:
+                    case 6:
 
                         break;
                     case 0:
-                        salir();
+                        exit();
                         break;
                     default:
                         System.out.println("Opción inválida");
@@ -50,11 +53,11 @@ public class Control {
         } while (true);
     }
 
-    private static void inicializar() {
+    private static void clean() {
         System.out.print("\033[H\033[2J"); // limpiar la consola
     }
 
-    private static void salir() {
+    private static void exit() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
         System.exit(0);
@@ -77,4 +80,25 @@ public class Control {
         int opcion = Keyboard.readInt(opciones);
         return opcion;
     }
+
+    private static void registerDietitian() throws Exception {
+
+        ArrayList<String> jugadores = new ArrayList<>();
+
+        jugadores.add("Diego Armando Maradona");
+
+        Utils.writeText(jugadores, "src/CSVs/dietitians.csv");
+
+    }
+
+     private static void registerPatient() throws Exception {
+
+        ArrayList<String> jugadores = new ArrayList<>();
+
+        jugadores.add("Diego Armando Maradona");
+
+        Utils.writeText(jugadores, "src/CSVs/patients.csv");
+
+    }
+    
 }
