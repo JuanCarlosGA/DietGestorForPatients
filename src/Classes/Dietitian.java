@@ -5,6 +5,9 @@ public class Dietitian {
     private String name;
     private String speciality;
 
+    public Dietitian() {
+    }
+
     Dietitian(int dietitianId, String name, String speciality) {
         this.dietitianId = dietitianId;
         this.name = name;
