@@ -54,22 +54,5 @@ public class Patient {
         this.heigth = heigth;
     }
 
-    
-
-    private static void testWriteText() throws Exception {
-
-        ArrayList<String> patients = new ArrayList<>();
-
-        patients.add("Diego Armando Maradona");
-        patients.add("Lionel Messi");
-        patients.add("Cristiano Ronaldo");
-        patients.add("Johan Cruyff");
-        patients.add("Franz Beckenbauer");
-
-        Utils.writeText(patients, "src/CSVs/pacientes.csv");
-
-    }
-
-   
 
 }
