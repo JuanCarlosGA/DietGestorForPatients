@@ -1,4 +1,4 @@
-package clases;
+package Classes;
 
 public class DietPlan {
     private String dietitianId;
