@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.List;
 
 import Classes.Dietitian;
 import Helpers.Keyboard;
@@ -13,8 +13,8 @@ import Helpers.CSVCoder;
 
 public class Control {
 
-    private int dietitianIdCounter = 1;
-    private int patientIdCounter = 1;
+    private int dietitianIdCounter = 0;
+    private int patientIdCounter = 0;
 
     public void showArray(ArrayList<Dietitian> array) {
         for (Dietitian element : array) {
@@ -38,7 +38,7 @@ public class Control {
                         registerDietitian();
                         break;
                     case 2:
-
+                        updateDietitian();
                         break;
                     case 3:
                         registerPatient();
@@ -75,17 +75,17 @@ public class Control {
     }
 
     static int leerOpcion() {
-        String opciones = String.format("\n%sOption menu:%s\n", Utils.GREEN, Utils.RESET)
-                + "  1 - registerDietitian                        7 - createDietPlan\n"
-                + "  2 - updateDietitian                          8 - updateDietPlan\n"
-                + "  3 - resgisterPatient\n"
-                + "  4 - updatePatiet\n"
-                + "  5 - deletePatient\n"
-                + "  6 - registerMeal\n"
+        String opciones = String.format("\n%sMenú:%s\n", Utils.GREEN, Utils.RESET)
+                + "  1 - Registrar Nutricionista                  7 - Crear Plan de Dieta\n"
+                + "  2 - Actualizar Nutricionista                 8 - Actualizar Plan de Dieta\n"
+                + "  3 - Registrar Paciente\n"
+                + "  4 - Actualizar paciente\n"
+                + "  5 - Borrar Paciente\n"
+                + "  6 - Agregar Comida\n"
 
                 + String.format("  %s0 - Exit%s\n", Utils.RED, Utils.RESET)
                 + String.format(
-                        "\nChoose one option (%s0 for exit%s) > ",
+                        "\nSeleccione una opción (%s0 for exit%s) > ",
                         Utils.RED, Utils.RESET);
 
         int opcion = Keyboard.readInt(opciones);
@@ -93,57 +93,82 @@ public class Control {
     }
 
     public void registerDietitian() throws Exception {
-        ArrayList<String> dietitian = new ArrayList<>();
-        String info = Keyboard.readString("Enter the name of the dietitian: ");
-
-        dietitian.add("Diego Armando Maradona");
-
-        Utils.writeText(dietitian, "src/CSVs/dietitians.csv");
-
-    }
-
-    public void readDietitians() throws Exception {
-        ArrayList<String> dietitians = new ArrayList<>();
-
-        CSVCoder<Dietitian> coder = new CSVCoder<Dietitian>(';') {
-            @Override
-            public String[] encode(Dietitian dietitian) {
-                String[] data = new String[3];
-                data[0] = String.valueOf(dietitian.getDietitianId());
-                data[1] = dietitian.getName();
-                data[2] = dietitian.getSpeciality();
-                return data;
-            }
-
-            @Override
-            public Dietitian decode(String[] data) {
-                Dietitian dietitian = new Dietitian();
-                dietitian.setDietitianId(Integer.parseInt(data[0]));
-                dietitian.setName(data[1]);
-                dietitian.setSpeciality(data[2]);
-                return dietitian;
-            }
-        };
         try {
-            coder.readFromFile("src/CSVs/dietitians.csv", null);
+            ArrayList<String> dietitian = new ArrayList<>();
 
-            System.out.println("Dietitians:");
-            for (String element : dietitians) {
-                System.out.println(element);
+            List<List<String>> data = readDietitian();
+
+            for (List<String> element : data) {
+                dietitian.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2));
+                dietitianIdCounter++;
             }
-        } catch (IOException e) {
-            System.out.println("Archivo no encontrado en Control.java");
+
+            String info = dietitianIdCounter + ";" + Keyboard.readString("Nombre: ");
+            info += ";" + Keyboard.readString("Especialidad: ");
+
+            dietitian.add(info);
+
+            Utils.writeText(dietitian, "src/CSVs/dietitians.csv");
+        } catch (Exception e) {
+           System.out.println("Error al registrar nutricionista");
         }
     }
 
-     public void registerPatient() throws Exception {
+    public void updateDietitian() throws Exception {
+        try {
+            ArrayList<String> dietitian = new ArrayList<>();
 
-        ArrayList<String> jugadores = new ArrayList<>();
+            String id = Keyboard.readString("Ingrese el id del nutricionista a actualizar: ");
+            List<List<String>> data = readDietitian();
+            for (List<String> element : data) {
+                if (id.equals(element.get(0))) {
+                    String name = Keyboard.readString("Nombre: ");
+                    String specialty = Keyboard.readString("Especialidad: ");
+                    dietitian.add(id + ";" + name + ";" + specialty);
+                } else {
+                    dietitian.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2));
+                }
+            }
 
-        jugadores.add("Diego Armando Maradona");
+            Utils.writeText(dietitian, "src/CSVs/dietitians.csv");
+        } catch (Exception e) {
+            System.out.println("Error al actualizar nutricionista");
+        }
+    }
 
-        Utils.writeText(jugadores, "src/CSVs/patients.csv");
+    public List<List<String>> readDietitian() throws Exception {
+        CSVCoder reader = new CSVCoder();
+        try {
+            List<List<String>> data = reader.readCSV("src/CSVs/dietitians.csv");
+            return data;
+        } catch (IOException e) {
+            return null;
+        }
+    }
 
+    public void registerPatient() throws Exception {
+        try {
+            ArrayList<String> patient = new ArrayList<>();
+
+            CSVCoder reader = new CSVCoder();
+            List<List<String>> data = reader.readCSV("src/CSVs/patients.csv");
+
+            for (List element : data) {
+                patient.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2) + ";" + element.get(3) + ";" + element.get(4));
+                patientIdCounter++;
+            }
+
+            String info = patientIdCounter + ";" + Keyboard.readString("Nombre: ");
+            info += ";" + Keyboard.readString("Edad: ");
+            info += ";" + Keyboard.readString("Peso (kg): ");
+            info += ";" + Keyboard.readString("Altura (cm): ");
+
+            patient.add(info);
+
+            Utils.writeText(patient, "src/CSVs/patients.csv");
+        } catch (Exception e) {
+            System.out.println("Error al registrar paciente");
+        }
     }
     
 }
