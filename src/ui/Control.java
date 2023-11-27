@@ -32,8 +32,8 @@ public class Control {
 
         do {
             try {
-                int opcion = leerOpcion();
-                switch (opcion) {
+                int option = option();
+                switch (option) {
                     case 1:
                         registerDietitian();
                         break;
@@ -74,7 +74,7 @@ public class Control {
         System.exit(0);
     }
 
-    static int leerOpcion() {
+    static int option() {
         String opciones = String.format("\n%sMenú:%s\n", Utils.GREEN, Utils.RESET)
                 + "  1 - Registrar Nutricionista                  7 - Crear Plan de Dieta\n"
                 + "  2 - Actualizar Nutricionista                 8 - Actualizar Plan de Dieta\n"
@@ -90,6 +90,16 @@ public class Control {
 
         int opcion = Keyboard.readInt(opciones);
         return opcion;
+    }
+
+    public List<List<String>> readDietitian() throws Exception {
+        CSVCoder reader = new CSVCoder();
+        try {
+            List<List<String>> data = reader.readCSV("src/CSVs/dietitians.csv");
+            return data;
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public void registerDietitian() throws Exception {
@@ -133,16 +143,6 @@ public class Control {
             Utils.writeText(dietitian, "src/CSVs/dietitians.csv");
         } catch (Exception e) {
             System.out.println("Error al actualizar nutricionista");
-        }
-    }
-
-    public List<List<String>> readDietitian() throws Exception {
-        CSVCoder reader = new CSVCoder();
-        try {
-            List<List<String>> data = reader.readCSV("src/CSVs/dietitians.csv");
-            return data;
-        } catch (IOException e) {
-            return null;
         }
     }
 
