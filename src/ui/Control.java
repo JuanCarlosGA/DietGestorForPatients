@@ -43,13 +43,19 @@ public class Control {
                         registerPatient();
                         break;
                     case 4:
+                        updatePatient();
                         break;
-
                     case 5:
 
                         break;
                     case 6:
 
+                        break;
+                    case 7:
+                        
+                        break;
+                    case 8:
+                        
                         break;
                     case 0:
                         exit();
@@ -92,9 +98,17 @@ public class Control {
     }
 
     public List<List<String>> readDietitian() throws Exception {
-        Utils reader = new Utils();
         try {
-            List<List<String>> data = reader.readCSV("src/CSVs/dietitians.csv");
+            List<List<String>> data = Utils.readCSV("src/CSVs/dietitians.csv");
+            return data;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public List<List<String>> readPatient() throws Exception {
+        try {
+            List<List<String>> data = Utils.readCSV("src/CSVs/patients.csv");
             return data;
         } catch (IOException e) {
             return null;
@@ -148,12 +162,12 @@ public class Control {
 
     public void registerPatient() throws Exception {
         try {
+            this.patientIdCounter = 0;
             ArrayList<String> patient = new ArrayList<>();
 
-            Utils reader = new Utils();
-            List<List<String>> data = reader.readCSV("src/CSVs/patients.csv");
+            List<List<String>> data = readPatient();
 
-            for (List element : data) {
+            for (List<String> element : data) {
                 patient.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2) + ";" + element.get(3) + ";" + element.get(4));
                 patientIdCounter++;
             }
@@ -170,5 +184,28 @@ public class Control {
             System.out.println("Error al registrar paciente");
         }
     }
-    
+
+    public void updatePatient() throws Exception {
+        try {
+            ArrayList<String> patient = new ArrayList<>();
+
+            String id = Keyboard.readString("Ingrese el id del paciente a actualizar: ");
+            List<List<String>> data = readPatient();
+            for (List<String> element : data) {
+                if (id.equals(element.get(0))) {
+                    String info = patientIdCounter + ";" + Keyboard.readString("Nombre: ");
+                    info += ";" + Keyboard.readString("Edad: ");
+                    info += ";" + Keyboard.readString("Peso (kg): ");
+                    info += ";" + Keyboard.readString("Altura (cm): ");
+                    patient.add(info);
+                } else {
+                    patient.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2) + ";" + element.get(3) + ";" + element.get(4));
+                }
+            }
+
+            Utils.writeText(patient, "src/CSVs/patients.csv");
+        } catch (Exception e) {
+            System.out.println("Error al actualizar paciente");
+        }
+    }
 }

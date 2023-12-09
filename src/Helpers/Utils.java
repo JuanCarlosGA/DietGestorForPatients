@@ -84,7 +84,7 @@ public class Utils {
         }
     }
 
-    public List<List<String>> readCSV(String filePath) throws Exception {
+    public static List<List<String>> readCSV(String filePath) throws Exception {
         List<List<String>> data = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(filePath));
