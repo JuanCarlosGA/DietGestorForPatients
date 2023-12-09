@@ -11,6 +11,7 @@ public class Control {
     private int dietitianIdCounter = 0;
     private int patientIdCounter = 0;
     private int mealIdCounter = 0;
+    private int dietPlanIdCounter = 0;
 
     public void menu() {
 
@@ -43,10 +44,13 @@ public class Control {
                         addMeal();
                         break;
                     case 7:
-                        
+                        deleteMeal();
                         break;
                     case 8:
-                        
+                        createDietPlan();
+                        break;
+                    case 9:
+                        updateDietPlan();
                         break;
                     case 0:
                         exit();
@@ -60,11 +64,11 @@ public class Control {
         } while (true);
     }
 
-    private static void clean() {
+    private void clean() {
         System.out.print("\033[H\033[2J"); // Clean the console
     }
 
-    private static void exit() {
+    private void exit() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
         System.exit(0);
@@ -72,10 +76,10 @@ public class Control {
 
     static int option() {
         String opciones = String.format("\n%sMenú:%s\n", Utils.GREEN, Utils.RESET)
-                + "  1 - Registrar Nutricionista                  7 - Crear Plan de Dieta\n"
-                + "  2 - Actualizar Nutricionista                 8 - Actualizar Plan de Dieta\n"
-                + "  3 - Registrar Paciente\n"
-                + "  4 - Actualizar paciente\n"
+                + "  1 - Registrar Nutricionista                  7 - Eliminar Comida\n"
+                + "  2 - Actualizar Nutricionista                 8 - Crear Plan de Dieta\n"
+                + "  3 - Registrar Paciente                       9 - Actualizar Plan de Dieta\n"
+                + "  4 - Actualizar paciente                      10 - Borrar Plan de Dieta\n"
                 + "  5 - Borrar Paciente\n"
                 + "  6 - Agregar Comida\n"
 
@@ -86,6 +90,10 @@ public class Control {
 
         int opcion = Keyboard.readInt(opciones);
         return opcion;
+    }
+
+    public String entityOption(String info) {
+        return Keyboard.readString(info);
     }
 
     public List<List<String>> readDietitian() throws Exception {
@@ -100,6 +108,24 @@ public class Control {
     public List<List<String>> readPatient() throws Exception {
         try {
             List<List<String>> data = Utils.readCSV("src/CSVs/patients.csv");
+            return data;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public List<List<String>> readMeal() throws Exception {
+        try {
+            List<List<String>> data = Utils.readCSV("src/CSVs/meals.csv");
+            return data;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public List<List<String>> readDietPlan() throws Exception {
+        try {
+            List<List<String>> data = Utils.readCSV("src/CSVs/dietPlans.csv");
             return data;
         } catch (IOException e) {
             return null;
@@ -223,7 +249,7 @@ public class Control {
             this.mealIdCounter = 0;
             ArrayList<String> meal = new ArrayList<>();
 
-            List<List<String>> data = readPatient();
+            List<List<String>> data = readMeal();
 
             for (List<String> element : data) {
                 meal.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2) + ";" + element.get(3) + ";" + element.get(4));
@@ -239,7 +265,147 @@ public class Control {
 
             Utils.writeText(meal, "src/CSVs/meals.csv");
         } catch (Exception e) {
-            System.out.println("Error al registrar paciente");
+            System.out.println("Error al registrar alimento");
+        }
+    }
+
+    public void deleteMeal() throws Exception {
+        try {
+            ArrayList<String> meal = new ArrayList<>();
+
+            String id = Keyboard.readString("Ingrese el id del alimento a eliminar: ");
+            List<List<String>> data = readMeal();
+            for (List<String> element : data) {
+                if (!id.equals(element.get(0))) {
+                    meal.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2) + ";" + element.get(3) + ";" + element.get(4));
+                }
+            }
+
+            Utils.writeText(meal, "src/CSVs/meals.csv");
+        } catch (Exception e) {
+            System.out.println("Error al eliminar alimento");
+        }
+    }
+
+    public void createDietPlan() throws Exception {
+        try {
+            this.dietPlanIdCounter = 0;
+            ArrayList<String> dietPlan = new ArrayList<>();
+            String entityOptions = "";
+
+            List<List<String>> data = readDietPlan();
+
+            for (List<String> element : data) {
+                dietPlan.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2) + ";" + element.get(3) + ";" 
+                + element.get(4) + ";" + element.get(5) + ";" + element.get(6));
+                dietPlanIdCounter++;
+            }
+
+            data = readPatient();
+
+            for (List<String> element : data) {
+                entityOptions += element.get(0) + ". " + element.get(1) + "\n";
+            }
+            entityOptions += "Elije un paciente para afiliar al plan (id): ";
+            String info = dietPlanIdCounter + ";" + entityOption(entityOptions);
+
+            data = readDietitian();
+            entityOptions = "";
+
+            for (List<String> element : data) {
+                entityOptions += element.get(0) + ". " + element.get(1) + "\n";
+            }
+            entityOptions += "Elije un nutricionista para afiliar al plan (id): ";
+            info += ";" + entityOption(entityOptions);
+
+            data = readMeal();
+            entityOptions = "";
+
+            for (List<String> element : data) {
+                entityOptions += element.get(0) + ". " + element.get(1) + "\n";
+            }
+            entityOptions += "Elije una comida para afiliar al plan (id): ";
+            info += ";" + entityOption(entityOptions);
+
+            info += ";" + Keyboard.readString("Calorias diarias: ");
+            info += ";" + Keyboard.readString("Distribución de macronutrientes: ");
+            info += ";" + Keyboard.readString("Recomendaciones específicas: ");
+
+            dietPlan.add(info);
+
+            Utils.writeText(dietPlan, "src/CSVs/dietPlans.csv");
+        } catch (Exception e) {
+            System.out.println("Error al registrar plan de dieta");
+        }
+    }
+
+    public void updateDietPlan() throws Exception {
+        try {
+            ArrayList<String> dietPlan = new ArrayList<>();
+            String entityOptions = "";
+
+            String id = Keyboard.readString("Ingrese el id del plan de dieta a actualizar: ");
+            List<List<String>> data = readDietPlan();
+            for (List<String> element : data) {
+                if (id.equals(element.get(0))) {
+                    data = readPatient();
+                    for (List<String> patient : data) {
+                        entityOptions += patient.get(0) + ". " + patient.get(1) + "\n";
+                    }
+                    entityOptions += "Elije un paciente para afiliar al plan (id): ";
+                    String info = element.get(0) + ";" + entityOption(entityOptions);
+
+                    data = readDietitian();
+                    entityOptions = "";
+
+                    for (List<String> dietitian : data) {
+                        entityOptions += dietitian.get(0) + ". " + dietitian.get(1) + "\n";
+                    }
+                    entityOptions += "Elije un nutricionista para afiliar al plan (id): ";
+                    info += ";" + entityOption(entityOptions);
+
+                    data = readMeal();
+                    entityOptions = "";
+
+                    for (List<String> meal : data) {
+                        entityOptions += meal.get(0) + ". " + meal.get(1) + "\n";
+                    }
+                    entityOptions += "Elije una comida para afiliar al plan (id): ";
+                    info += ";" + entityOption(entityOptions);
+
+                    info += ";" + Keyboard.readString("Calorias diarias: ");
+                    info += ";" + Keyboard.readString("Distribución de macronutrientes: ");
+                    info += ";" + Keyboard.readString("Recomendaciones específicas: ");
+
+                    dietPlan.add(info);
+                } else {
+                    dietPlan.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2) + ";" + element.get(3) + ";" 
+                    + element.get(4) + ";" + element.get(5) + ";" + element.get(6));
+                }
+            }
+
+            Utils.writeText(dietPlan, "src/CSVs/dietPlans.csv");
+        } catch (Exception e) {
+            System.out.println("Error al actualizar plan de dieta");
+        }
+    }
+
+    public void deleteDietPlan() throws Exception {
+        try {
+            ArrayList<String> dietPlan = new ArrayList<>();
+
+            String id = Keyboard.readString("Ingrese el id del plan de dieta a eliminar: ");
+            List<List<String>> data = readDietPlan();
+            for (List<String> element : data) {
+                if (!id.equals(element.get(0))) {
+                    dietPlan.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2) + ";" + element.get(3) + ";" 
+                    + element.get(4) + ";" + element.get(5) + ";" + element.get(6));
+                }
+            }
+
+            Utils.writeText(dietPlan, "src/CSVs/dietPlans.csv");
+        } catch (Exception e) {
+            System.out.println("Error al eliminar plan de dieta");
         }
     }
 }

@@ -1,0 +1,2 @@
+id;patientId;dietitianId;mealsId;dailyCalories;macroNutrientsDistribution;specificRecomendations
+1;2;4;5;3000;200;Hola mundo

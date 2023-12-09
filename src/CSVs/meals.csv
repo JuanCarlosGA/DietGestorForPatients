@@ -1,2 +1,2 @@
-id;name;age;weight;height
-1;Frijoles;340;600;1200
+id;mealName;macronutrients;calories;timeOfDay
+1;Frijolada;200;400;1200
