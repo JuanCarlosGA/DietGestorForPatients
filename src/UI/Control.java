@@ -52,6 +52,9 @@ public class Control {
                     case 9:
                         updateDietPlan();
                         break;
+                    case 10:
+                        deleteDietPlan();
+                        break;
                     case 0:
                         exit();
                         break;
