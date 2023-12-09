@@ -1,13 +1,16 @@
 package Helpers;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
@@ -81,4 +84,23 @@ public class Utils {
         }
     }
 
+    public List<List<String>> readCSV(String filePath) throws Exception {
+        List<List<String>> data = new ArrayList<>();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(";");
+                List<String> row = new ArrayList<>();
+                for (String value : values) {
+                    row.add(value);
+                }
+                data.add(row);
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return data;
+        }
 }

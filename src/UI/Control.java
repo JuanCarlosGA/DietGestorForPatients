@@ -9,7 +9,6 @@ import java.util.List;
 import Classes.Dietitian;
 import Helpers.Keyboard;
 import Helpers.Utils;
-import Helpers.CSVCoder;
 
 public class Control {
 
@@ -93,7 +92,7 @@ public class Control {
     }
 
     public List<List<String>> readDietitian() throws Exception {
-        CSVCoder reader = new CSVCoder();
+        Utils reader = new Utils();
         try {
             List<List<String>> data = reader.readCSV("src/CSVs/dietitians.csv");
             return data;
@@ -104,6 +103,7 @@ public class Control {
 
     public void registerDietitian() throws Exception {
         try {
+            this.dietitianIdCounter = 0;
             ArrayList<String> dietitian = new ArrayList<>();
 
             List<List<String>> data = readDietitian();
@@ -150,7 +150,7 @@ public class Control {
         try {
             ArrayList<String> patient = new ArrayList<>();
 
-            CSVCoder reader = new CSVCoder();
+            Utils reader = new Utils();
             List<List<String>> data = reader.readCSV("src/CSVs/patients.csv");
 
             for (List element : data) {
