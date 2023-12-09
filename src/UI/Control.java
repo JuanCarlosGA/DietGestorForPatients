@@ -1,12 +1,8 @@
 package UI;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import Classes.Dietitian;
 import Helpers.Keyboard;
 import Helpers.Utils;
 
@@ -14,12 +10,7 @@ public class Control {
 
     private int dietitianIdCounter = 0;
     private int patientIdCounter = 0;
-
-    public void showArray(ArrayList<Dietitian> array) {
-        for (Dietitian element : array) {
-            System.out.println(element.getName());
-        }
-    }
+    private int mealIdCounter = 0;
 
     public void menu() {
 
@@ -46,10 +37,10 @@ public class Control {
                         updatePatient();
                         break;
                     case 5:
-
+                        deletePatient();
                         break;
                     case 6:
-
+                        addMeal();
                         break;
                     case 7:
                         
@@ -70,7 +61,7 @@ public class Control {
     }
 
     private static void clean() {
-        System.out.print("\033[H\033[2J"); // limpiar la consola
+        System.out.print("\033[H\033[2J"); // Clean the console
     }
 
     private static void exit() {
@@ -206,6 +197,49 @@ public class Control {
             Utils.writeText(patient, "src/CSVs/patients.csv");
         } catch (Exception e) {
             System.out.println("Error al actualizar paciente");
+        }
+    }
+
+    public void deletePatient() throws Exception {
+        try {
+            ArrayList<String> patient = new ArrayList<>();
+
+            String id = Keyboard.readString("Ingrese el id del paciente a eliminar: ");
+            List<List<String>> data = readPatient();
+            for (List<String> element : data) {
+                if (!id.equals(element.get(0))) {
+                    patient.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2) + ";" + element.get(3) + ";" + element.get(4));
+                }
+            }
+
+            Utils.writeText(patient, "src/CSVs/patients.csv");
+        } catch (Exception e) {
+            System.out.println("Error al eliminar paciente");
+        }
+    }
+
+    public void addMeal() throws Exception {
+        try {
+            this.mealIdCounter = 0;
+            ArrayList<String> meal = new ArrayList<>();
+
+            List<List<String>> data = readPatient();
+
+            for (List<String> element : data) {
+                meal.add(element.get(0) + ";" + element.get(1) + ";" + element.get(2) + ";" + element.get(3) + ";" + element.get(4));
+                mealIdCounter++;
+            }
+
+            String info = mealIdCounter + ";" + Keyboard.readString("Nombre: ");
+            info += ";" + Keyboard.readString("Macronutrientes: ");
+            info += ";" + Keyboard.readString("Calorias: ");
+            info += ";" + Keyboard.readString("Hora del dia (0000 - 2400): ");
+
+            meal.add(info);
+
+            Utils.writeText(meal, "src/CSVs/meals.csv");
+        } catch (Exception e) {
+            System.out.println("Error al registrar paciente");
         }
     }
 }
