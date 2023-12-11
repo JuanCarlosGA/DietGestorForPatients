@@ -273,7 +273,7 @@ public class Control {
             List<List<String>> data = readPatient();
             for (List<String> element : data) {
                 if (id.equals(element.get(0))) {
-                    String info = patientIdCounter + ";" + Keyboard.readString("Nombre: ");
+                    String info = element.get(0) + ";" + Keyboard.readString("Nombre: ");
                     info += ";" + Keyboard.readString("Edad: ");
                     info += ";" + Keyboard.readString("Peso (kg): ");
                     info += ";" + Keyboard.readString("Altura (cm): ");

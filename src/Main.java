@@ -6,7 +6,7 @@ public class Main {
         try {
             control.menu();
         } catch (Exception e) {
-            System.out.println("Archivo no encontrado");
+            System.out.println("Hubo algun error ejecutando el sistema");
         }
     }
 }
