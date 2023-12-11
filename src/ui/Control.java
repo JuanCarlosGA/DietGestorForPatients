@@ -13,6 +13,10 @@ public class Control {
     private int mealIdCounter = 0;
     private int dietPlanIdCounter = 0;
 
+    /*
+     * This function is used to show the menu of the program
+     * @return void
+     */
     public void menu() {
 
         try {
@@ -67,16 +71,28 @@ public class Control {
         } while (true);
     }
 
+    /*
+     * This function is used to clean the console
+     * @return void
+     */
     private void clean() {
         System.out.print("\033[H\033[2J"); // Clean the console
     }
 
+    /*
+     * This function is used to exit the program
+     * @return void
+     */
     private void exit() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
         System.exit(0);
     }
 
+    /*
+     * This function is used to get the option of the menu
+     * @return int
+     */
     static int option() {
         String opciones = String.format("\n%sMenú:%s\n", Utils.GREEN, Utils.RESET)
                 + "  1 - Registrar Nutricionista                  7 - Eliminar Comida\n"
@@ -94,11 +110,20 @@ public class Control {
         int opcion = Keyboard.readInt(opciones);
         return opcion;
     }
-
+    /*
+     * This function is used to get the option of the entity to be registered
+     * @param String info
+     * @return String
+     */
     public String entityOption(String info) {
         return Keyboard.readString(info);
     }
 
+    /*
+     * This function is used to read the CSV data from dietitians
+     * @return List<List<String>> data
+     * @throws Exception
+     */
     public List<List<String>> readDietitian() throws Exception {
         try {
             List<List<String>> data = Utils.readCSV("src/CSVs/dietitians.csv");
@@ -108,6 +133,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to read the CSV data from patients
+     * @return List<List<String>> data
+     * @throws Exception
+     */
     public List<List<String>> readPatient() throws Exception {
         try {
             List<List<String>> data = Utils.readCSV("src/CSVs/patients.csv");
@@ -117,6 +147,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to read the CSV data from meals
+     * @return List<List<String>> data
+     * @throws Exception
+     */
     public List<List<String>> readMeal() throws Exception {
         try {
             List<List<String>> data = Utils.readCSV("src/CSVs/meals.csv");
@@ -126,6 +161,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to read the CSV data from dietPlans
+     * @return List<List<String>> data
+     * @throws Exception
+     */
     public List<List<String>> readDietPlan() throws Exception {
         try {
             List<List<String>> data = Utils.readCSV("src/CSVs/dietPlans.csv");
@@ -135,6 +175,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to register a dietitian to the CSV file
+     * @throws Exception
+     * @return void
+     */
     public void registerDietitian() throws Exception {
         try {
             this.dietitianIdCounter = 0;
@@ -158,6 +203,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to update a dietitian to the CSV file
+     * @throws Exception
+     * @return void
+     */
     public void updateDietitian() throws Exception {
         try {
             ArrayList<String> dietitian = new ArrayList<>();
@@ -180,6 +230,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to register a patient to the CSV file
+     * @throws Exception
+     * @return void
+     */
     public void registerPatient() throws Exception {
         try {
             this.patientIdCounter = 0;
@@ -205,6 +260,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to update a patient to the CSV file
+     * @throws Exception
+     * @return void
+     */
     public void updatePatient() throws Exception {
         try {
             ArrayList<String> patient = new ArrayList<>();
@@ -229,6 +289,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to delete a patient to the CSV file
+     * @throws Exception
+     * @return void
+     */
     public void deletePatient() throws Exception {
         try {
             ArrayList<String> patient = new ArrayList<>();
@@ -247,6 +312,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to add a meal to the CSV file
+     * @throws Exception
+     * @return void
+     */
     public void addMeal() throws Exception {
         try {
             this.mealIdCounter = 0;
@@ -272,6 +342,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to delete a meal to the CSV file
+     * @throws Exception
+     * @return void
+     */
     public void deleteMeal() throws Exception {
         try {
             ArrayList<String> meal = new ArrayList<>();
@@ -290,6 +365,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to create a diet plan to the CSV file
+     * @throws Exception
+     * @return void
+     */
     public void createDietPlan() throws Exception {
         try {
             this.dietPlanIdCounter = 0;
@@ -342,6 +422,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to update a diet plan to the CSV file
+     * @throws Exception
+     * @return void
+     */
     public void updateDietPlan() throws Exception {
         try {
             ArrayList<String> dietPlan = new ArrayList<>();
@@ -393,6 +478,11 @@ public class Control {
         }
     }
 
+    /*
+     * This function is used to delete a diet plan to the CSV file
+     * @throws Exception
+     * @return void
+     */
     public void deleteDietPlan() throws Exception {
         try {
             ArrayList<String> dietPlan = new ArrayList<>();
